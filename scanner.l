@@ -1,15 +1,24 @@
 %{
-	int chars =0;
-	int words =0;
-	int lines =0;
+	int palabraReservada = 0;
+	int sgoPuntuacion = 0;
+	int identificador = 0;
+	int operadores = 0;
+	int operadores = 0;
+	int constanteEntera = 0;
+	int asignacion = 0;
 %}
 
 %%
-
-[a-zA-Z]+ {words++; chars += strlen(yytext); }
-\n	{ chars++; lines++; }
-.	{ chars++; }
-
+	"programa" 							return PROGRAMA;
+	"variables"							return VARIABLES;
+	"definir"							return DEFINIR;
+	"codigo"							return CODIGO;
+	"leer"								return LEER;
+	"fin"								return FIN;
+	[a-zA-Z][a-zA-Z0-9]*				return IDENTIFICADOR;
+	"//".*								;
+	[0-9]+								return CONSTANTE;
+	["(" ")" ";" "," "+" "-" "*" "/"]	return SGOPUNTUACION;
 %%
 
 main()
