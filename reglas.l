@@ -6,7 +6,7 @@ letra [a-zA-Z]
 digito [0-9]
 operador [-+*/]
 puntuacion [;,()]
-invalido [^ \na-zA-Z0-9;,()+*/-]
+invalido [^ \n\ta-zA-Z0-9;,()+*/-]
 %%	
 programa 									return PROGRAMA;
 leer 										return LEER;
@@ -20,20 +20,20 @@ leer 										return LEER;
 :=											return ASIGNACION;
 {operador}									return OPERADORES;
 {digito}+									return CONSTANTE;
-
 "/""/".*			;
 .|\n    			;
 {digito}+{letra}+							printf("Error léxico: constante con sufijo inválido: %s\n",yytext);
-{letra}({letra}|{digito})*{invalido}+		printf("Error léxico: identificador invalido: %s\n",yytext);
+{letra}({letra}|{digito})*{invalido}+({letra}|{digito}|{invalido})*		printf("Error léxico: identificador invalido: %s\n",yytext);
 {invalido}+									printf("Error léxico: cadena desconocida: %s\n",yytext);
+
 <<EOF>>							return EOF;
 
 %%
-char *token_names[] = {"FDT", "PROGRAMA", "VARIABLES", "OPERADORES", "ASIGNACION", "DEFINIR", "CODIGO", "IDENTIFICADOR", "LEER", "ESCRIBIR", "FIN", "SGOPUNTUACION", "CONSTANTE"};
+char *token_names[] = {"FDT", "Programa", "Variables", "Operadores", "Asignación", "Definir", "Código", "Identificador", "Leer", "Escribir", "Fin", "SgoPuntuacion", "Constante"};
 int main() {
 	enum token t;
 	while ((t = yylex()) != EOF){
-		if (t==IDENTIFICADOR || t== CONSTANTE) printf("Token: %s\t\tLexema: %s\n", token_names[t], yytext);
+		if (t==IDENTIFICADOR || t== CONSTANTE) printf("Token: %s\tlexema: %s\n", token_names[t], yytext);
 		else if (t==SGOPUNTUACION || t== OPERADORES) printf("Token: '%s'\n", yytext);
 		else printf("Token: %s\n", token_names[t]);
 	}
